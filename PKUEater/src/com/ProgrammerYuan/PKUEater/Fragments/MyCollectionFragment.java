@@ -14,6 +14,7 @@ import com.ProgrammerYuan.PKUEater.R;
 import com.ProgrammerYuan.PKUEater.activities.*;
 import com.ProgrammerYuan.PKUEater.adapters.DishAdapter;
 import com.ProgrammerYuan.PKUEater.model.Dish;
+import com.ProgrammerYuan.PKUEater.utils.EaterDB;
 import studio.archangel.toolkitv2.util.Logger;
 import studio.archangel.toolkitv2.widgets.AngelActionBar;
 
@@ -36,14 +37,23 @@ public class MyCollectionFragment extends B2Fragment{
 	}
 
 	@Override
+	public void onResume(){
+		super.onResume();
+		dishes.clear();
+		dishes.addAll(EaterDB.getMyFavoriteDishes());
+		adapter.notifyDataSetChanged();
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		setRealName("HomeFragment");
 		if(!onCreateView(inflater,container,savedInstanceState, R.layout.frag_collection)){
 			list = (ListView)cache.findViewById(R.id.frag_collection_list);
 			dishes = new ArrayList<>();
-			dishes.add(new Dish("麻辣香锅","超辣超好吃",0,5));
-			dishes.add(new Dish("糖醋里脊","酸甜可口，鲜嫩多汁",1,3));
-			dishes.add(new Dish("木须肉","色泽鲜艳有营养",2,4));
+			dishes.addAll(EaterDB.getMyFavoriteDishes());
+//			dishes.add(new Dish("麻辣香锅","超辣超好吃",0,5));
+//			dishes.add(new Dish("糖醋里脊","酸甜可口，鲜嫩多汁",1,3));
+//			dishes.add(new Dish("木须肉","色泽鲜艳有营养",2,4));
 			adapter = new DishAdapter(owner,dishes);
 			list.setAdapter(adapter);
 			list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -85,18 +95,6 @@ public class MyCollectionFragment extends B2Fragment{
 				public void onClick(View view) {
 					Intent intent = new Intent(owner, DIYDishActivity.class);
 					startActivity(intent);
-				}
-			});
-			aab.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// do nothing
-				}
-			});
-			aab.setTitleListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// do nothing
 				}
 			});
 		}

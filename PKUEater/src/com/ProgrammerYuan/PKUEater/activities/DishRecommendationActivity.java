@@ -14,8 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ProgrammerYuan.PKUEater.R;
 import com.ProgrammerYuan.PKUEater.model.Dish;
+import com.ProgrammerYuan.PKUEater.utils.EaterDB;
 import studio.archangel.toolkitv2.AngelActivity;
 import studio.archangel.toolkitv2.dialogs.LoadingDialog;
+import studio.archangel.toolkitv2.util.image.ImageProvider;
 import studio.archangel.toolkitv2.widgets.AngelActionBar;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class DishRecommendationActivity extends AngelActivity {
 	TextView tv_name1,tv_name2,tv_name3;
 	boolean like1 = false,like2 = false,like3 = false;
 	private ArrayList<Dish> dishes;
-	int offset = 0;
+	int offset = 0,canteen_id;
 	public void setupActionBar(String title) {
 		ActionBar bar = getActionBar();
 		if (bar == null) {
@@ -58,6 +60,13 @@ public class DishRecommendationActivity extends AngelActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_dish_recommendation);
 		setupActionBar("菜品推荐");
+		Bundle data = getIntent().getExtras();
+		if(data != null){
+			canteen_id = data.getInt("canteen_id",-1);
+		} else {
+			canteen_id = -1;
+		}
+
 		refreshBtn = (TextView) findViewById(R.id.act_dish_recommendation_refresh_btn);
 		refreshBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -67,14 +76,14 @@ public class DishRecommendationActivity extends AngelActivity {
 				flip(0);
 			}
 		});
-		dialog = new LoadingDialog(this,R.color.main_2);
-		dishes = new ArrayList<>();
-		dishes.add(new Dish("麻辣香锅", "超辣超好吃", 0,5));
-		dishes.add(new Dish("糖醋里脊", "酸甜可口，鲜嫩多汁", 1,3));
-		dishes.add(new Dish("木须肉", "色泽鲜艳有营养", 2,4));
-		dishes.add(new Dish("木须肉", "色泽鲜艳有营养", 2,4));
-		dishes.add(new Dish("糖醋里脊", "酸甜可口，鲜嫩多汁", 1,3));
-		dishes.add(new Dish("麻辣香锅", "超辣超好吃", 0,5));
+//		dialog = new LoadingDialog(this,R.color.main_2);
+//		dishes = new ArrayList<>();
+//		dishes.add(new Dish("麻辣香锅", "超辣超好吃", 0,5));
+//		dishes.add(new Dish("糖醋里脊", "酸甜可口，鲜嫩多汁", 1,3));
+//		dishes.add(new Dish("木须肉", "色泽鲜艳有营养", 2,4));
+//		dishes.add(new Dish("木须肉", "色泽鲜艳有营养", 2,4));
+//		dishes.add(new Dish("糖醋里脊", "酸甜可口，鲜嫩多汁", 1,3));
+//		dishes.add(new Dish("麻辣香锅", "超辣超好吃", 0,5));
 		rl_dish1 = (RelativeLayout)findViewById(R.id.act_dish_recommendation_card1);
 		rl_dish2 = (RelativeLayout)findViewById(R.id.act_dish_recommendation_card2);
 		rl_dish3 = (RelativeLayout)findViewById(R.id.act_dish_recommendation_card3);
@@ -92,6 +101,7 @@ public class DishRecommendationActivity extends AngelActivity {
 			public void onClick(View view) {
 				like1 = !like1;
 				iv_like1.setImageResource(like1 ? R.drawable.icon_like : R.drawable.icon_not_like);
+				EaterDB.likeDish(dishes.get(offset),like1);
 			}
 		});
 		iv_like2.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +109,7 @@ public class DishRecommendationActivity extends AngelActivity {
 			public void onClick(View view) {
 				like2 = !like2;
 				iv_like2.setImageResource(like2 ? R.drawable.icon_like : R.drawable.icon_not_like);
+				EaterDB.likeDish(dishes.get(offset + 1), like2);
 			}
 		});
 		iv_like3.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +117,7 @@ public class DishRecommendationActivity extends AngelActivity {
 			public void onClick(View view) {
 				like3 = !like3;
 				iv_like3.setImageResource(like3 ? R.drawable.icon_like : R.drawable.icon_not_like);
+				EaterDB.likeDish(dishes.get(offset + 2), like3);
 			}
 		});
 		rl_dish1.setOnClickListener(new View.OnClickListener() {
@@ -132,28 +144,42 @@ public class DishRecommendationActivity extends AngelActivity {
 				startActivity(intent);
 			}
 		});
-
+		dishes = new ArrayList<>();
+		dishes.addAll(EaterDB.getDishesOfCanteen(canteen_id, 0, 6));
+		if(dishes.size() > 0){
+			Dish dish = dishes.get(0);
+			dishes.clear();
+			for(int i = 0;i<6;i++)
+				dishes.add(dish);
+		} else {
+			getDishes();
+		}
+		for(int i = 0;i<3;i++)
+			fillData(i,dishes.get(i));
 	}
 
 	private void fillData(int index,Dish dish){
 		switch (index){
 			case 0:
-				iv_avatar1.setImageResource(dish.pic_resource);
+//				iv_avatar1.setImageResource(dish.pic_resource);
+				ImageProvider.display(iv_avatar1,dish.getImageUrl());
 				tv_name1.setText(dish.getName());
-				iv_like1.setImageResource(R.drawable.icon_not_like);
-				like1 = false;
+				iv_like1.setImageResource(dish.isLiked ? R.drawable.icon_like : R.drawable.icon_not_like);
+				like1 = dish.isLiked;
 				break;
 			case 1:
-				iv_avatar2.setImageResource(dish.pic_resource);
+//				iv_avatar2.setImageResource(dish.pic_resource);
+				ImageProvider.display(iv_avatar2,dish.getImageUrl());
 				tv_name2.setText(dish.getName());
-				iv_like2.setImageResource(R.drawable.icon_not_like);
-				like2 = false;
+				iv_like2.setImageResource(dish.isLiked ? R.drawable.icon_like : R.drawable.icon_not_like);
+				like1 = dish.isLiked;
 				break;
 			case 2:
-				iv_avatar3.setImageResource(dish.pic_resource);
+//				iv_avatar3.setImageResource(dish.pic_resource);
+				ImageProvider.display(iv_avatar3,dish.getImageUrl());
 				tv_name3.setText(dish.getName());
-				iv_like3.setImageResource(R.drawable.icon_not_like);
-				like3 = false;
+				iv_like3.setImageResource(dish.isLiked ? R.drawable.icon_like : R.drawable.icon_not_like);
+				like1 = dish.isLiked;
 				break;
 		}
 	}
@@ -219,5 +245,9 @@ public class DishRecommendationActivity extends AngelActivity {
 				anim5.start();
 				break;
 		}
+	}
+
+	public void getDishes(){
+
 	}
 }

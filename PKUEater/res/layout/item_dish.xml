@@ -36,16 +36,6 @@
 					android:text=""
 					android:textSize="16sp"
 					android:textColor="@color/main_2"/>
-			<RatingBar
-					android:id="@+id/item_dish_rating"
-					android:layout_width="wrap_content"
-					android:layout_height="24dp"
-					android:layout_marginTop="4dp"
-					android:progressDrawable="@drawable/layer_ratingbar"
-					android:rating="3"
-					android:numStars="5"
-					android:stepSize="0.1"
-					android:isIndicator="true"/>
 			<TextView
 					android:id="@+id/item_dish_intro"
 					android:layout_width="wrap_content"

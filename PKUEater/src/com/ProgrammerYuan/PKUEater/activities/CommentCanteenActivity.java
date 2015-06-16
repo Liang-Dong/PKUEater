@@ -13,6 +13,7 @@ import studio.archangel.toolkitv2.widgets.AngelActionBar;
  */
 public class CommentCanteenActivity extends Activity {
 
+
 	AngelActionBar aab;
 	public void setupActionBar(String title) {
 		ActionBar bar = getActionBar();
@@ -34,7 +35,7 @@ public class CommentCanteenActivity extends Activity {
 		aab.setRightListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				CommentCanteenActivity.this.onBackPressed();
+				comment();
 			}
 		});
 		bar.setCustomView(aab);
@@ -46,5 +47,10 @@ public class CommentCanteenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_comment_canteen);
 		setupActionBar("评价食堂");
+
+	}
+
+	public void comment(){
+
 	}
 }

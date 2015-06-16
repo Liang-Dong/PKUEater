@@ -84,7 +84,7 @@ public class CanteenRecommendationActivity extends AngelActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(CanteenRecommendationActivity.this, DishRecommendationActivity.class);
-				intent.putExtra("canteen_id", index);
+				intent.putExtra("canteen_id", canteens.get(index).getId());
 				startActivity(intent);
 			}
 		});
@@ -123,6 +123,9 @@ public class CanteenRecommendationActivity extends AngelActivity {
 			@Override
 			public void onClick(View view) {
 				Intent intent = new Intent(CanteenRecommendationActivity.this, CanteenDetailActivity.class);
+				Bundle data = new Bundle();
+				data.putSerializable("canteen",canteens.get(index));
+				intent.putExtras(data);
 				startActivity(intent);
 			}
 		});

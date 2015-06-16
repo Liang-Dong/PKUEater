@@ -29,7 +29,7 @@ public class DishAdapter extends CommonAdapter<Dish> {
 			public void onCacheGenerated(CommonAdapterViewCache c, Dish dish) {
 				c.setViewValue(TextView.class,dish.getName(),R.id.item_dish_name);
 				c.setViewValue(TextView.class,dish.getIntro(),R.id.item_dish_intro);
-				c.setViewValue(ImageView.class,dish.pic_resource,R.id.item_dish_image);
+				c.setViewValue(ImageView.class,dish.getImageUrl(),R.id.item_dish_image);
 			}
 		};
 	}

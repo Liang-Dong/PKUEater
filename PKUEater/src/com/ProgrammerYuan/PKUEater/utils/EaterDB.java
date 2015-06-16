@@ -10,6 +10,7 @@ import com.ProgrammerYuan.PKUEater.model.DBEntry;
 import com.ProgrammerYuan.PKUEater.model.Dish;
 import studio.archangel.toolkitv2.util.Logger;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -95,6 +96,28 @@ public class EaterDB {
         }
         cursor.close();
         return canteens;
+    }
+
+    public static ArrayList<Dish> getMyFavoriteDishes(){
+        ArrayList<Dish> dishes = new ArrayList<>();
+        Cursor cursor = query("`dishes`",null,"liked = 1",null,null,null);
+        int row = cursor.getCount();
+        if(row > 0){
+            cursor.moveToFirst();
+            for(int i = 0;i<row;i++){
+                dishes.add(new Dish(cursor));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return dishes;
+    }
+
+    public static void likeDish(Dish dish,boolean like){
+        int like_int = like ? 1:0;
+        String sql = "UPDATE `dishes` set liked = " + like_int + " where id = " + dish.getId();
+        getDb().execSQL(sql);
+        return;
     }
 
     public static ArrayList<Dish> getDishesOfCanteen(int canteen_id,int offset,int limit){

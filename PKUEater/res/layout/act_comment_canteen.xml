@@ -13,6 +13,7 @@
 			android:layout_marginTop="8dp"
 			android:background="@color/white"
 			android:textColor="@color/black"
+			android:padding="8dp"
 			android:textColorHint="@color/hint"/>
 	<LinearLayout android:layout_width="fill_parent"
 				  android:layout_height="wrap_content"
@@ -23,7 +24,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:gravity="center"
-				android:text="有多好吃:"
+				android:text="拥挤程度:"
 				android:textColor="@color/black"/>
 		<RatingBar
 				android:id="@+id/item_canteen_rating"
@@ -42,7 +43,7 @@
 			android:lines="6"
 			android:gravity="start"
 			android:background="@color/white"
-			android:hint="请描述对于菜品的感受"
+			android:hint="请描述对于食堂的感受"
 			android:textColor="@color/black"
 			android:textColorHint="@color/hint"/>
 	<TextView

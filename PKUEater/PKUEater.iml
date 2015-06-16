@@ -18,6 +18,6 @@
     <orderEntry type="module" module-name="ArchAngeltoolkitV2" exported="" />
     <orderEntry type="module" module-name="RoundedImageView" exported="" />
     <orderEntry type="module" module-name="ListViewAnimation" exported="" />
-    <orderEntry type="library" name="classes" level="project" />
+    <orderEntry type="library" exported="" name="classes" level="project" />
   </component>
 </module>

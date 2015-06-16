@@ -19,8 +19,8 @@ public class Canteen extends DBEntry implements Serializable {
 	private String startTime,endTime;
 	private String image_url;
 	private String location;
-	private double crowdedness;
-	private ArrayList<Dish> dishes;
+	private float crowdedness;
+	public ArrayList<Dish> dishes;
 
 	public Canteen(){
 
@@ -28,7 +28,7 @@ public class Canteen extends DBEntry implements Serializable {
 
 	@Override
 	public String getDeletingSql() {
-		return null;
+		return "delete from `canteens` where id = " + id;
 	}
 
 	@Override
@@ -54,8 +54,8 @@ public class Canteen extends DBEntry implements Serializable {
 		image_url = jo.optString("image");
 		content = jo.optString("description");
 		id = jo.optInt("id");
-		comment_count = jo.optInt("crowd_rate_count",0);
-		crowdedness = jo.optDouble("crowd_rate",0);
+		comment_count = jo.optInt("crowd_rate_count", 0);
+		crowdedness = Double.valueOf(jo.optDouble("crowd_rate",0)).floatValue();
 		if(jo.has("dishes")){
 			dishes = new ArrayList<>();
 			JSONArray ja = jo.optJSONArray("dishes");
@@ -79,7 +79,11 @@ public class Canteen extends DBEntry implements Serializable {
 		content = c.getString(c.getColumnIndex("content"));
 		comment_count = c.getInt(c.getColumnIndex("comment_count"));
 		crowdedness = c.getFloat(c.getColumnIndex("rate"));
-		dishes = EaterDB.getDishesOfCanteen(id,0,15);
+		dishes = EaterDB.getDishesOfCanteen(id, 0, 15);
+	}
+
+	public int getId(){
+		return id;
 	}
 
 	public String getName(){
@@ -88,6 +92,14 @@ public class Canteen extends DBEntry implements Serializable {
 
 	public String getImageUrl(){
 		return image_url;
+	}
+
+	public String getContent(){
+		return content;
+	}
+
+	public float getRate(){
+		return crowdedness;
 	}
 
 	public String getDishesTitle(){

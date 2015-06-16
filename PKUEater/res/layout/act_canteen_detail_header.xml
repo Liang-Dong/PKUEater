@@ -42,6 +42,7 @@
 					android:numStars="5"
 					android:stepSize="0.1"/>
 			<TextView
+					android:id="@+id/item_canteen_des"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="我是全北大最大但最挤的食堂，二层比一层的饭好吃多了，但是一层人少,所以我也不知道我在写些神马"
