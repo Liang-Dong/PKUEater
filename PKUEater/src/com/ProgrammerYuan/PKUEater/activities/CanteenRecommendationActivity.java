@@ -164,7 +164,7 @@ public class CanteenRecommendationActivity extends AngelActivity {
 			@Override
 			public void onStart(){
 				if(gtv.getVisibility() != View.INVISIBLE){
-					gtv.setData(R.drawable.loading, "吃货祈祷中");
+					//gtv.setData(R.drawable.loading, "吃货祈祷中");
 				}
 				if(!silence) dialog = new LoadingDialog(CanteenRecommendationActivity.this,R.color.main_2);
 			}
