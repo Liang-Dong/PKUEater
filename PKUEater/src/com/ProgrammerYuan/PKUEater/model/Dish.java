@@ -114,4 +114,9 @@ public class Dish extends DBEntry implements Serializable{
 				"`price` double" +
 				");";
 	}
+	
+	/*public int getCanteenId()
+	{
+		return canteen_id;
+	}*/
 }

@@ -1,12 +1,15 @@
 package com.ProgrammerYuan.PKUEater.model;
 
 import android.database.Cursor;
+
 import com.ProgrammerYuan.PKUEater.utils.EaterDB;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -108,5 +111,16 @@ public class Canteen extends DBEntry implements Serializable {
 			ret += dishes.get(i).getName() + "\n";
 		}
 		return ret;
+	}
+	
+	// ----------------------added by Wilford-----------------------
+	public boolean isOpen()
+	{
+		SimpleDateFormat sdf=new SimpleDateFormat("HHmm");  
+		String date=sdf.format(new java.util.Date());  
+		if (date.compareTo(startTime) < 0 || date.compareTo(endTime) > 0)
+			return false;
+		else
+			return true;
 	}
 }

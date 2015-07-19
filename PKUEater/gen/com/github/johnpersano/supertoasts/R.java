@@ -56,25 +56,25 @@ public final class R {
 		public static final int icon_light_save = 0x7f020032;
 		public static final int icon_light_share = 0x7f020033;
 		public static final int icon_light_undo = 0x7f020034;
-		public static final int mask = 0x7f020052;
-		public static final int selector_kitkat_square_undobutton = 0x7f02005e;
-		public static final int selector_kitkat_undobutton = 0x7f02005f;
-		public static final int selector_undobutton = 0x7f02006a;
-		public static final int shape_kitkat_square_undobarfocused = 0x7f020071;
-		public static final int shape_kitkat_square_undobarselected = 0x7f020072;
-		public static final int shape_kitkat_undobarfocused = 0x7f020073;
-		public static final int shape_kitkat_undobarselected = 0x7f020074;
-		public static final int shape_undobarfocused = 0x7f020078;
-		public static final int shape_undobarselected = 0x7f020079;
-		public static final int spot_mask = 0x7f02007b;
+		public static final int mask = 0x7f020053;
+		public static final int selector_kitkat_square_undobutton = 0x7f02005f;
+		public static final int selector_kitkat_undobutton = 0x7f020060;
+		public static final int selector_undobutton = 0x7f02006b;
+		public static final int shape_kitkat_square_undobarfocused = 0x7f020072;
+		public static final int shape_kitkat_square_undobarselected = 0x7f020073;
+		public static final int shape_kitkat_undobarfocused = 0x7f020074;
+		public static final int shape_kitkat_undobarselected = 0x7f020075;
+		public static final int shape_undobarfocused = 0x7f020079;
+		public static final int shape_undobarselected = 0x7f02007a;
+		public static final int spot_mask = 0x7f02007c;
 	}
 	public static final class id {
-		public static final int button = 0x7f06007f;
-		public static final int card_container = 0x7f06005d;
-		public static final int divider = 0x7f06007e;
-		public static final int message_textview = 0x7f06007d;
-		public static final int progress_bar = 0x7f060080;
-		public static final int root_layout = 0x7f06007c;
+		public static final int button = 0x7f060080;
+		public static final int card_container = 0x7f06005e;
+		public static final int divider = 0x7f06007f;
+		public static final int message_textview = 0x7f06007e;
+		public static final int progress_bar = 0x7f060081;
+		public static final int root_layout = 0x7f06007d;
 	}
 	public static final class layout {
 		public static final int dummy_layout = 0x7f030013;

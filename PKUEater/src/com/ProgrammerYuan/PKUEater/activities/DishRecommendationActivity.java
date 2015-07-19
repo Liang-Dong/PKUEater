@@ -4,23 +4,35 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.ProgrammerYuan.PKUEater.R;
 import com.ProgrammerYuan.PKUEater.model.Dish;
 import com.ProgrammerYuan.PKUEater.utils.EaterDB;
+
 import studio.archangel.toolkitv2.AngelActivity;
 import studio.archangel.toolkitv2.dialogs.LoadingDialog;
 import studio.archangel.toolkitv2.util.image.ImageProvider;
 import studio.archangel.toolkitv2.widgets.AngelActionBar;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by mac on 15/5/31.
@@ -33,8 +45,53 @@ public class DishRecommendationActivity extends AngelActivity {
 	ImageView iv_like1,iv_like2,iv_like3,iv_avatar1,iv_avatar2,iv_avatar3;
 	TextView tv_name1,tv_name2,tv_name3;
 	boolean like1 = false,like2 = false,like3 = false;
-	private ArrayList<Dish> dishes;
+	private ArrayList<Dish> dishes, dishBase;
 	int offset = 0,canteen_id;
+	
+	// ----------------------added by Wilford-----------------------
+	final String startTime = "0600";
+	final String endTime = "1900";
+	
+	final int ctnNum = 6; 
+	final int likeWeight = 10;
+	
+	final int walkLim = 500;
+	final double ctnLat[] = {0, 0, 0, 0, 0, 0};
+	final double ctnLon[] = {0, 0, 0, 0, 0, 0};
+	
+	int lastCtnPriority[] = new int [ctnNum];
+	int nowCtnPriority[] = {1, 1, 1, 1, 1, 1};
+	
+	
+	public void updateCtnPriority(Location nowlct)
+	{
+		
+		float[] results = new float[1];
+		for (int i = 0; i < ctnNum; i ++)	
+		{
+			double lat = nowlct.getLatitude(), lon = nowlct.getLongitude();
+			Location.distanceBetween(lat, lon, ctnLat[i], ctnLon[i], results);
+			if (results[0] < 40)
+				nowCtnPriority[i] = 2000;
+			if (results[0] > walkLim)
+				nowCtnPriority[i] = 1;
+			else
+				nowCtnPriority[i] = 100;
+		}
+	}
+	
+	LocationManager lMng;
+	public Location getLocation(Context context) 
+	{ 
+		 Location location = lMng.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		 if (location == null) {
+			 location = lMng.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		   }
+		 return location;
+	}
+	
+	//-------------------------------End-------------------------------
+	
 	public void setupActionBar(String title) {
 		ActionBar bar = getActionBar();
 		if (bar == null) {
@@ -67,12 +124,32 @@ public class DishRecommendationActivity extends AngelActivity {
 			canteen_id = -1;
 		}
 
+		// ----------------------added by Wilford-----------------------
+		if (canteen_id == -1)
+		{
+			lMng = (LocationManager) getSystemService(Context.LOCATION_SERVICE);   
+			if (!lMng.isProviderEnabled(LocationManager.GPS_PROVIDER)) {  
+				Toast.makeText(this, "开个GPS呗亲", Toast.LENGTH_SHORT).show();  
+				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);  
+				startActivityForResult(intent, 0);  
+				return;  
+			}
+
+			Location nowlct = getLocation(this);
+			updateCtnPriority(nowlct);
+			lMng.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3200, 25, locationListener);  
+		}
+    // 位置监听  
+    
+	    //-------------------------------End-------------------------------
+		
 		refreshBtn = (TextView) findViewById(R.id.act_dish_recommendation_refresh_btn);
 		refreshBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				offset +=3;
-				offset %= dishes.size();
+				
+				getDishes(); //offset +=3;	// ----------------------added by Wilford-----------------------
+				//offset %= dishes.size();
 				flip(0);
 			}
 		});
@@ -144,18 +221,23 @@ public class DishRecommendationActivity extends AngelActivity {
 				startActivity(intent);
 			}
 		});
+		
 		dishes = new ArrayList<>();
 		dishes.addAll(EaterDB.getDishesOfCanteen(canteen_id, 0, 6));
+		// ----------------------added by Wilford-----------------------
+		/*
 		if(dishes.size() > 0){
 			Dish dish = dishes.get(0);
 			dishes.clear();
 			for(int i = 0;i<6;i++)
 				dishes.add(dish);
-		} else {
+		} else {*/
 			getDishes();
-		}
+		//}
+		offset = 0;
 		for(int i = 0;i<3;i++)
-			fillData(i,dishes.get(i));
+			fillData(i,dishes.get(i + offset));
+		
 	}
 
 	private void fillData(int index,Dish dish){
@@ -246,8 +328,104 @@ public class DishRecommendationActivity extends AngelActivity {
 				break;
 		}
 	}
+	
+	
+	// ----------------------added by Wilford-----------------------
+	private LocationListener locationListener = new LocationListener() {	  
+        /** 
+         * 位置信息变化时触发 
+         */  
+        public void onLocationChanged(Location location) {  
+        	updateCtnPriority(location);
+        }
+		@Override
+		public void onProviderDisabled(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 
-	public void getDishes(){
+		@Override
+		public void onProviderEnabled(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 
+		@Override
+		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+			// TODO Auto-generated method stub
+			
+		}
+    };
+	
+    class toSort implements Comparable
+    {
+    	int index, value;
+		@Override
+		public int compareTo(Object o) {
+			toSort p = (toSort) o;
+			if (value > p.value)
+				return 1;
+			else if (value < p.value)
+				return -1;
+			else
+				return 0;
+		}
 	}
+    
+    private toSort ref [] = new toSort [100];
+    public void generateWL()
+	{
+    	int iLike, dishPriority;
+		for (int i = 0; i < dishes.size(); i++)
+		{
+			// Mystle: whether the style of the dish matches my favourite tags
+			// -1 for match least favourite; 0 for no match; 1 for match farourite
+			// might be updated when favourite tags change
+
+			// likeWeight is a setting that should be adjusted during communicating with the server			
+			
+			// iLike:  100 for I have loved the dish; 0 for not
+			ref[i].index = i;
+			Dish dis = dishes.get(i);
+			dishPriority = (int) (dis.getRating() * likeWeight + (dis.isLiked ? 100 : 0));
+			if (canteen_id == -1)
+				dishPriority *= (isOpen()? 10:1);
+			ref[i].value = dishPriority; // insert and rank/not to insert the dish in Waiting list according to its Priority
+		}
+		Arrays.sort(ref);
+		for (int i = 0; i < dishes.size(); i++)
+			dishBase.add(dishes.get(ref[i].index));
+		dishes.clear();
+		for (int i = 0; i < dishes.size(); i++)
+			dishBase.add(dishBase.get(i));
+	}
+    
+    public boolean isOpen()
+	{
+		SimpleDateFormat sdf=new SimpleDateFormat("HHmm");  
+		String date=sdf.format(new java.util.Date());  
+		if (date.compareTo(startTime) < 0 || date.compareTo(endTime) > 0)
+			return false;
+		else
+			return true;
+	}
+    
+    
+	public void getDishes(){
+		if (canteen_id != -1 || lastCtnPriority.equals(nowCtnPriority) == true) // location has not changed much
+		{
+			offset += 3;
+			offset %= dishes.size();
+		}
+		else
+		{
+			if (canteen_id == -1)
+				for (int i = 0; i < ctnNum; i++)
+					lastCtnPriority[i] = nowCtnPriority[i];
+			generateWL();
+			offset = 0;				
+		} 
+	}
+	
+	
 }

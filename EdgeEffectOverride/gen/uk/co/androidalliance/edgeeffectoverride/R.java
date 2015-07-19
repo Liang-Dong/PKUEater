@@ -17,24 +17,24 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int edgeeffect_color=0x7f010000;
+        public static int edgeeffect_color=0x7f010000;
     }
     public static final class color {
         /** <color name="default_edgeeffect_color">#FF33B5E5</color>
 <color name="default_edgeeffect_color">#FF717171</color>
          */
-        public static final int default_edgeeffect_color=0x7f040000;
+        public static int default_edgeeffect_color=0x7f040000;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int overscroll_edge=0x7f020001;
-        public static final int overscroll_glow=0x7f020002;
+        public static int ic_launcher=0x7f020000;
+        public static int overscroll_edge=0x7f020001;
+        public static int overscroll_glow=0x7f020002;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static int main=0x7f030000;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
+        public static int app_name=0x7f050000;
     }
     public static final class styleable {
         /** Attributes that can be used with a EdgeEffectView.

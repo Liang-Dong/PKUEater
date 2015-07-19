@@ -12,7 +12,7 @@ public final class R {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int stuckShadowDrawable=0x7f010001;
+        public static int stuckShadowDrawable=0x7f010001;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -22,16 +22,16 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int stuckShadowHeight=0x7f010000;
+        public static int stuckShadowHeight=0x7f010000;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static int ic_launcher=0x7f020000;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static int main=0x7f030000;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
+        public static int app_name=0x7f040000;
     }
     public static final class styleable {
         /** Attributes that can be used with a StickyScrollView.
